@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.image.ImageActivity">
+
+
+    <RelativeLayout
+        android:id="@+id/container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_centerInParent="true"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/khula_semi_bold"
+            android:gravity="center"
+            android:paddingLeft="24dp"
+            android:paddingTop="24dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="20dp"
+            android:text="Hello"
+            android:textColor="#626262"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/container"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="32dp"
+        android:text="Button" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/container"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="80dp"
+        android:text="Button" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/container"
+
+        android:layout_centerInParent="true"
+        android:layout_marginTop="16dp"
+
+        android:scaleType="fitXY" />
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/customize_text_toolbar_height"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"
+        app:cardBackgroundColor="#f4f4f4">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/toolbar_size"
+                    style="@style/AppTheme.ToolbarImageView"
+                    android:layout_width="@dimen/customize_text_toolbar_height"
+
+                    android:layout_height="@dimen/customize_text_toolbar_height"
+                    app:srcCompat="@drawable/ic_toolbar_size" />
+
+                <ImageView
+                    android:id="@+id/toolbar_align"
+                    style="@style/AppTheme.ToolbarImageView"
+                    android:layout_width="@dimen/customize_text_toolbar_height"
+
+                    android:layout_height="@dimen/customize_text_toolbar_height"
+                    app:srcCompat="@drawable/ic_toolbar_align" />
+
+                <ImageView
+                    android:id="@+id/toolbar_font"
+                    style="@style/AppTheme.ToolbarImageView"
+                    android:layout_width="@dimen/customize_text_toolbar_height"
+
+                    android:layout_height="@dimen/customize_text_toolbar_height"
+                    app:srcCompat="@drawable/ic_toolbar_font" />
+
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_background_bar_height" />
+
+</RelativeLayout>
