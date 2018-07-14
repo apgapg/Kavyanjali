@@ -2,10 +2,12 @@ package com.reweyou.master.kavyanjali.ui.image;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -19,11 +21,13 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.reweyou.master.kavyanjali.GlideApp;
 import com.reweyou.master.kavyanjali.R;
 import com.reweyou.master.kavyanjali.adapter.BackgroundAdapter;
+import com.reweyou.master.kavyanjali.utils.FileUtils;
 import com.reweyou.master.kavyanjali.utils.Utils;
 
 import java.util.ArrayList;
@@ -44,6 +48,11 @@ public class ImageActivity extends AppCompatActivity implements ItemBackgroundCl
     private RecyclerView mRecyclerView;
     private ImageViewModel mModel;
     private ImageView imageView;
+    private TextView textView;
+    private boolean isCopyright = false;
+    private ScrollView mScrollView;
+    private View container;
+    private String content;
 
 
     @Override
@@ -52,13 +61,21 @@ public class ImageActivity extends AppCompatActivity implements ItemBackgroundCl
         setContentView(R.layout.activity_image);
         mModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
-        imageView = findViewById(R.id.imageView);
-        final ImageView imageViewdisplay = findViewById(R.id.imageView1);
-        final View container = findViewById(R.id.container);
-        final TextView textView = findViewById(R.id.textview);
+        content = getIntent().getStringExtra("content");
+        if (content.length() > 300)
+            mTextSize = 16;
+        else if (content.length() > 500)
+            mTextSize = 14;
 
+
+        imageView = findViewById(R.id.image);
+        container = findViewById(R.id.container);
+        textView = findViewById(R.id.textview);
+        mScrollView = findViewById(R.id.scrollView);
         mRecyclerView = findViewById(R.id.recycler_view);
 
+
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mTextSize);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         mAdapter = new BackgroundAdapter(this, this);
@@ -72,8 +89,7 @@ public class ImageActivity extends AppCompatActivity implements ItemBackgroundCl
         });
 
 
-        textView.setText("वहम से भी अक्सर खत्म हो जाते हैं कुछ रिश्ते\n" +
-                "कसूर हर बार गल्तियों का नही होता ");
+        textView.setText(content);
 
 
         textView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -87,30 +103,26 @@ public class ImageActivity extends AppCompatActivity implements ItemBackgroundCl
                 int height = textView.getHeight();
                 int width = textView.getWidth();
 
-                if (Utils.pxToDp(getApplicationContext(), height) < IMAGE_ASPECT_RATIO * width)
-                    imageView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (IMAGE_ASPECT_RATIO * width)));
+                RelativeLayout.LayoutParams layoutParams;
+                if (height < IMAGE_ASPECT_RATIO * width)
+                    layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (IMAGE_ASPECT_RATIO * width));
                 else
-                    imageView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
+                    layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height + Utils.dpToPx(getApplicationContext(), 40));
+
+                layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                imageView.setLayoutParams(layoutParams);
                 GlideApp.with(ImageActivity.this).load(getResources().getDrawable(R.drawable.b)).into(imageView);
 
                 return false;
             }
         });
 
-        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Bitmap bitmap = loadBitmapFromView(findViewById(R.id.container), container.getWidth(), container.getHeight());
-                GlideApp.with(ImageActivity.this).load(bitmap).into(imageViewdisplay);
-
-
-            }
-        });
 
         findViewById(R.id.toolbar_size).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                onTextHeightChange();
+
                 mTextSize = mTextSize + 2;
                 if (mTextSize > MAX_TEXT_SIZE)
                     mTextSize = MIN_TEXT_SIZE;
@@ -150,6 +162,7 @@ public class ImageActivity extends AppCompatActivity implements ItemBackgroundCl
         findViewById(R.id.toolbar_font).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                onTextHeightChange();
                 mTypefaceIndex++;
                 if (mTypefaceIndex > list.size() - 1)
                     mTypefaceIndex = 0;
@@ -157,6 +170,58 @@ public class ImageActivity extends AppCompatActivity implements ItemBackgroundCl
             }
         });
 
+        findViewById(R.id.toolbar_copyright).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                onTextHeightChange();
+
+
+                textView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+
+                    @Override
+                    public boolean onPreDraw() {
+                        if (textView.getViewTreeObserver().isAlive())
+                            textView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mScrollView.fullScroll(View.FOCUS_DOWN);
+
+                            }
+                        }, 100);
+
+                        return false;
+                    }
+                });
+
+
+                String text;
+                if (!isCopyright) {
+                    isCopyright = true;
+                    text = textView.getText().toString().concat("\n— Ayush P Gupta");
+                } else {
+                    isCopyright = false;
+                    text = textView.getText().toString().replace("\n— Ayush P Gupta", "");
+                }
+
+                textView.setText(text);
+            }
+        });
+
+        findViewById(R.id.done).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bitmap bitmap = loadBitmapFromView(container, container.getWidth(), container.getHeight());
+                String imagePath = FileUtils.getPublicAlbumStorageDir(ImageActivity.this, bitmap);
+                bitmap.recycle();
+
+                Intent i = new Intent(ImageActivity.this, UploadImageActivity.class);
+                i.putExtra("content", textView.getText().toString());
+                i.putExtra("imagepath", imagePath);
+                startActivity(i);
+            }
+        });
 
     }
 
@@ -171,6 +236,33 @@ public class ImageActivity extends AppCompatActivity implements ItemBackgroundCl
     @Override
     public void onItemBackgoundClick(String backgroundUrl) {
         GlideApp.with(ImageActivity.this).load(backgroundUrl).into(imageView);
+    }
+
+    public void onTextHeightChange() {
+
+        textView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+
+            @Override
+            public boolean onPreDraw() {
+                if (textView.getViewTreeObserver().isAlive())
+                    textView.getViewTreeObserver().removeOnPreDrawListener(this);
+
+                Log.d(TAG, "onPreDraw: " + textView.getHeight());
+                int height = textView.getHeight();
+                int width = textView.getWidth();
+
+                RelativeLayout.LayoutParams layoutParams;
+                if (height < IMAGE_ASPECT_RATIO * width)
+                    layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (IMAGE_ASPECT_RATIO * width));
+                else
+                    layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height + Utils.dpToPx(getApplicationContext(), 40));
+
+                layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                imageView.setLayoutParams(layoutParams);
+
+                return false;
+            }
+        });
     }
 }
 

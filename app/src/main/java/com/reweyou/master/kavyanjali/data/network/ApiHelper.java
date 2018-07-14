@@ -49,4 +49,14 @@ public class ApiHelper {
                 .setPriority(Priority.HIGH)
                 .build();
     }
+
+    public ANRequest uploadPost(String content, String description, String image) {
+        return AndroidNetworking.post("https://www.reweyou.in/poem/addpoem.php")
+                .addBodyParameter("uid", "1")
+                .addBodyParameter("content", content)
+                .addBodyParameter("description", description)
+                .addBodyParameter("image", image)
+                .setPriority(Priority.HIGH)
+                .build();
+    }
 }

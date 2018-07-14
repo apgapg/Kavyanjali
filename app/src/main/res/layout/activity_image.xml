@@ -7,117 +7,168 @@
     tools:context=".ui.image.ImageActivity">
 
 
-    <RelativeLayout
-        android:id="@+id/container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:layout_centerInParent="true">
+    <android.support.v7.widget.CardView
+        android:id="@+id/top_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/top_container_height"
+        app:cardBackgroundColor="#f4f4f4"
+        app:cardElevation="2dp">
 
         <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_centerInParent="true"
-            android:scaleType="fitXY" />
+            android:layout_width="@dimen/top_container_height"
+            android:layout_height="@dimen/top_container_height"
+            android:layout_gravity="start"
+            android:layout_marginLeft="4dp"
+            android:padding="8dp"
+            android:scaleType="centerCrop"
+            android:tint="@color/toolbar_icon_tint"
+            app:srcCompat="@drawable/ic_keyboard_arrow_left" />
 
         <TextView
-            android:id="@+id/textview"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="56dp"
+            android:gravity="center_vertical"
+            android:paddingBottom="1dp"
+            android:text="Customize Post"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/done"
+            android:layout_width="@dimen/top_container_height"
+            android:layout_height="@dimen/top_container_height"
+            android:layout_gravity="end"
+            android:layout_marginRight="4dp"
+            android:background="?selectableItemBackground"
+            android:padding="10dp"
+            android:scaleType="centerCrop"
+            android:tint="@color/toolbar_icon_tint"
+            app:srcCompat="@drawable/ic_done" />
+    </android.support.v7.widget.CardView>
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="140dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
+
+        <RelativeLayout
+            android:id="@+id/container"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/khula_semi_bold"
-            android:gravity="center"
-            android:paddingLeft="24dp"
-            android:paddingTop="24dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="20dp"
-            android:text="Hello"
-            android:textColor="#626262"
-            android:textSize="18dp"
-            android:textStyle="bold" />
-    </RelativeLayout>
 
+            >
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/container"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp"
-        android:text="Button" />
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_centerInParent="true"
+                android:scaleType="fitXY" />
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/container"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="80dp"
-        android:text="Button" />
+            <TextView
+                android:id="@+id/textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/khula_semi_bold"
+                android:gravity="center"
+                android:paddingLeft="24dp"
+                android:paddingTop="16dp"
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_below="@+id/container"
+                android:paddingRight="20dp"
+                android:paddingBottom="28dp"
+                android:text="Hello"
+                android:textColor="#626262"
+                android:textSize="18dp"
+                android:textStyle="bold" />
 
-        android:layout_centerInParent="true"
-        android:layout_marginTop="16dp"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/image"
+                android:layout_centerHorizontal="true"
+                android:paddingBottom="6dp"
+                android:text="Kavyanjali"
+                android:textColor="#626262"
+                android:textStyle="bold" />
+        </RelativeLayout>
 
-        android:scaleType="fitXY" />
+    </ScrollView>
 
     <android.support.v7.widget.CardView
+        android:id="@+id/bottom_container"
         android:layout_width="match_parent"
         android:layout_height="@dimen/customize_text_toolbar_height"
         android:layout_alignParentBottom="true"
+
         android:layout_marginBottom="100dp"
-        app:cardBackgroundColor="#f4f4f4">
+        app:cardBackgroundColor="#f4f4f4"
+        app:cardElevation="2dp">
 
-        <HorizontalScrollView
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/toolbar_size"
+                style="@style/AppTheme.ToolbarImageView"
+                android:layout_width="@dimen/customize_text_toolbar_height"
+
+                android:layout_height="@dimen/customize_text_toolbar_height"
+                app:srcCompat="@drawable/ic_toolbar_size" />
+
+            <ImageView
+                android:id="@+id/toolbar_align"
+                style="@style/AppTheme.ToolbarImageView"
+                android:layout_width="@dimen/customize_text_toolbar_height"
+
+                android:layout_height="@dimen/customize_text_toolbar_height"
+                app:srcCompat="@drawable/ic_toolbar_align" />
+
+            <ImageView
+                android:id="@+id/toolbar_font"
+                style="@style/AppTheme.ToolbarImageView"
+                android:layout_width="@dimen/customize_text_toolbar_height"
+
+                android:layout_height="@dimen/customize_text_toolbar_height"
+                app:srcCompat="@drawable/ic_toolbar_font" />
+
+            <Space
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_weight="1" />
 
-                <ImageView
-                    android:id="@+id/toolbar_size"
-                    style="@style/AppTheme.ToolbarImageView"
-                    android:layout_width="@dimen/customize_text_toolbar_height"
+            <ImageView
+                android:id="@+id/toolbar_copyright"
 
-                    android:layout_height="@dimen/customize_text_toolbar_height"
-                    app:srcCompat="@drawable/ic_toolbar_size" />
+                style="@style/AppTheme.ToolbarImageView"
+                android:layout_width="@dimen/customize_text_toolbar_height"
 
-                <ImageView
-                    android:id="@+id/toolbar_align"
-                    style="@style/AppTheme.ToolbarImageView"
-                    android:layout_width="@dimen/customize_text_toolbar_height"
-
-                    android:layout_height="@dimen/customize_text_toolbar_height"
-                    app:srcCompat="@drawable/ic_toolbar_align" />
-
-                <ImageView
-                    android:id="@+id/toolbar_font"
-                    style="@style/AppTheme.ToolbarImageView"
-                    android:layout_width="@dimen/customize_text_toolbar_height"
-
-                    android:layout_height="@dimen/customize_text_toolbar_height"
-                    app:srcCompat="@drawable/ic_toolbar_font" />
+                android:layout_height="@dimen/customize_text_toolbar_height"
+                app:srcCompat="@drawable/ic_copyright" />
 
 
-            </LinearLayout>
-        </HorizontalScrollView>
+        </LinearLayout>
 
 
     </android.support.v7.widget.CardView>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/bottom_background_bar_height" />
+        android:layout_height="@dimen/bottom_background_bar_height"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

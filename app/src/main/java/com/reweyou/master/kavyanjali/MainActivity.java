@@ -2,44 +2,65 @@ package com.reweyou.master.kavyanjali;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.reweyou.master.kavyanjali.adapter.PoemAdapter;
+import com.reweyou.master.kavyanjali.data.model.PoemModel;
 import com.reweyou.master.kavyanjali.databinding.ContentMainBinding;
 import com.reweyou.master.kavyanjali.ui.base.MvpView;
 import com.reweyou.master.kavyanjali.ui.home.HomeViewModel;
+import com.reweyou.master.kavyanjali.ui.image.WriteTextActivity;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MvpView {
 
 
     private HomeViewModel viewModel;
+    private PoemAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final ContentMainBinding binding = DataBindingUtil.setContentView(this, R.layout.content_main);
-       viewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
 
         binding.setModel(viewModel);
 
-        setSupportActionBar(binding.toolbar);
+
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new PoemAdapter(this);
+        binding.recyclerView.setAdapter(mAdapter);
 
 
-       /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        viewModel.getIsLoading().observe(this, new Observer<Boolean>() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onChanged(@Nullable Boolean aBoolean) {
+                binding.swiperefresh.setRefreshing(aBoolean.booleanValue());
             }
-        });*/
+        });
 
-       
+        viewModel.getPoemList().observe(this, new Observer<List<PoemModel>>() {
+            @Override
+            public void onChanged(@Nullable List<PoemModel> poemModels) {
+                mAdapter.add(poemModels);
+            }
+        });
+
+        binding.getRoot().findViewById(R.id.create).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, WriteTextActivity.class));
+            }
+        });
 
 
     }

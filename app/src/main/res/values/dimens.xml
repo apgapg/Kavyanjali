@@ -2,4 +2,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="customize_text_toolbar_height">40dp</dimen>
     <dimen name="bottom_background_bar_height">100dp</dimen>
+    <dimen name="top_container_height">48dp</dimen>
 </resources>
